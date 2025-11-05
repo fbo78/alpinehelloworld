@@ -1,5 +1,5 @@
 /* import shared library */ 
-@Library('fbo78-shared-library')
+@Library('fbo78-shared-library')_
 pipeline {
   environment {
     IMAGE_NAME = "alpinehelloworld"
