@@ -11,7 +11,7 @@ pipeline {
         agent any
         steps {
             script {
-                sh 'docker build -t fbo78/$IMAGE_NAME:$IMAGE_TAG .'
+                sh 'docker build -t $IMAGE_NAME:$IMAGE_TAG .'
 
             }
         }
@@ -21,7 +21,7 @@ pipeline {
         steps {
             script {
                 sh '''
-                   docker run --name $IMAGE_NAME -d -p 80:5000 fbo78/$IMAGE_NAME:$IMAGE_TAG
+                   docker run --name $IMAGE_NAME -d -p 80:5000 $IMAGE_NAME:$IMAGE_TAG
                    sleep 5
                 '''
 
@@ -85,5 +85,12 @@ pipeline {
         '''
     }
   }
-
+  post {
+    SUCCESS {
+      slackSend(color: '#00FF00', message: "SUCCESSFUL: Job $(env.JOB_NAME) | $(env.BUILD_NUMBER) | $(env.BUILD_URL))")
+    }
+    FAILURE {
+      slackSend(color: '#FF0000', message: "FAILED:     Job $(env.JOB_NAME) | $(env.BUILD_NUMBER) | $(env.BUILD_URL))")
+    }
+  }
 }
