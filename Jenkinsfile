@@ -57,34 +57,35 @@ pipeline {
       when {
         expression { GIT_BRANCH == "origin/master" }
       }
-    agent any
-    environment {
+      agent any
+      environment {
         HEROKU_API_KEY = credentials('heroku_api_key')
-    }
-    steps {
+      }
+      steps {
         sh '''
           heroku container:login
           heroku create $STAGING || echo "project already exist"
           heroku container:push -a $STAGING web
           heroku container:release -a $STAGING web
         '''
+      } 
     }
-  }
-  stage('CPush image in PRODUCTION and deploy it') {
+    stage('CPush image in PRODUCTION and deploy it') {
       when {
         expression { GIT_BRANCH == "origin/master" }
       }
-    agent any
-    environment {
+      agent any
+      environment {
         HEROKU_API_KEY = credentials('heroku_api_key')
-    }
-    steps {
+      }
+      steps {
         sh '''
           heroku container:login
           heroku create $PRODUCTION || echo "project already exist"
           heroku container:push -a $PRODUCTION web
           heroku container:release -a $PRODUCTION web
         '''
+      }
     }
   }
   post {
@@ -97,3 +98,5 @@ pipeline {
     }
   }
 }
+
+
